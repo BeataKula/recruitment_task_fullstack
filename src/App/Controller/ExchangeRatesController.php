@@ -14,7 +14,7 @@ use App\DTO\CurrencyDTOCollection;
 use App\Model\ApiResponse;
 use App\Service\ApiResponseSerializerService;
 
-use DateTime;
+use DateTimeImmutable;
 
 
 class ExchangeRatesController extends AbstractController
@@ -29,7 +29,16 @@ class ExchangeRatesController extends AbstractController
     public function index(Request $request): Response
     {
         $date = $request->query->get('date');
-        $selectedDate = $date ? new DateTime($date) : new DateTime('');
+
+        try {
+            $selectedDate = $date ? new DateTimeImmutable($date) : new DateTimeImmutable();
+        } catch (\Exception $e) {
+            return new Response(
+                json_encode(['error' => 'Invalid date format']),
+                Response::HTTP_BAD_REQUEST,
+                ['Content-Type' => 'application/json']
+            );
+        }
 
         $currencyDTOCollection =  $this->exchangeRateService->getCurrencyCollection($selectedDate->format('Y-m-d'));
 

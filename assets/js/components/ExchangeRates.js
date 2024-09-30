@@ -27,19 +27,6 @@ const ExchangeRates = () => {
   }, [location.search]);
 
   useEffect(() => {
-    const fetchExchangeRates = async (date, setRates) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axios.get(`/api/exchange-rates?date=${date}`);
-        setRates(Object.values(response.data.currencyDTOCollection.currencies));
-      } catch (error) {
-        setError('Error fetching exchange rates');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchExchangeRates(selectedDate, setExchangeRates);
     fetchExchangeRates(todayDate, setTodayRates);
   }, [selectedDate, todayDate]);
@@ -48,6 +35,23 @@ const ExchangeRates = () => {
     const newDate = e.target.value;
     setSelectedDate(newDate);
     history.push(`/exchange-rates?date=${newDate}`);
+  };
+
+  const fetchExchangeRates = async (date, setRates) => {
+      setLoading(true);
+      setError(null);
+    try {
+      const response = await axios.get(`/api/exchange-rates?date=${date}`);
+      setRates(Object.values(response.data.currencyDTOCollection.currencies));
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError('Error fetching exchange rates');
+      }
+    } finally {
+        setLoading(false);
+    }
   };
 
   return (

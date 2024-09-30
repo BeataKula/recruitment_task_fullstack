@@ -1,9 +1,9 @@
 // ExchangeRatesTable.js
 import React from 'react';
+import FormatRate from './Formatter.js';
+import '../../css/echangeRatesTable.css';
 
-const formatRate = (rate) => {
-  return Number.isFinite(rate) ? rate.toFixed(4) : 'N/A';
-};
+
 
 const ExchangeRatesTable = ({ exchangeRates, todayRates, selectedDate, todayDate }) => (
   <div className="grid-container">
@@ -23,12 +23,12 @@ const ExchangeRatesTable = ({ exchangeRates, todayRates, selectedDate, todayDate
         return (
           <div key={rate.currencyCode} className="grid-row">
             <div className="th-cell">{rate.currencyCode} <span>{rate.currencyName}</span> </div>
-            <div>{formatRate(rate.referenceRate)}</div>
-            <div className="light-cell">{formatRate(todayRate?.referenceRate)}</div>
-            <div>{formatRate(rate.buyRate)}</div>
-            <div className="light-cell">{formatRate(todayRate?.buyRate)}</div>
-            <div>{formatRate(rate.sellRate)}</div>
-            <div className="light-cell">{formatRate(todayRate?.sellRate)}</div>
+            <div>{FormatRate(rate.referenceRate)}</div>
+            <div className="light-cell">{FormatRate(todayRate?.referenceRate)}</div>
+            <div>{FormatRate(rate.buyRate)}</div>
+            <div className="light-cell">{FormatRate(todayRate?.buyRate)}</div>
+            <div>{FormatRate(rate.sellRate)}</div>
+            <div className="light-cell">{FormatRate(todayRate?.sellRate)}</div>
           </div>
         );
       })}

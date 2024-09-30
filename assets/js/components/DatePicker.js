@@ -1,5 +1,6 @@
 // DatePicker.js
 import React from 'react';
+import '../../css/datePicker.css';
 
 const DatePicker = ({ selectedDate, handleDateChange }) => (
   <div className="form-container">
