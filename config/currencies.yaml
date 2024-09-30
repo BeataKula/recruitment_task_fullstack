@@ -1,0 +1,30 @@
+EUR:
+  code: "EUR"
+  name: Euro
+  buyAdjustment: -0.05
+  sellAdjustment: 0.07
+  buyEnabled: true
+USD:
+  code: "USD"
+  name: "Dolar amerykański"
+  buyAdjustment: -0.05
+  sellAdjustment: 0.07
+  buyEnabled: true
+CZK:
+  code: "CZK"
+  name: "Korona czeska"
+  buyAdjustment: null
+  sellAdjustment: 0.15
+  buyEnabled: false
+IDR:
+  code: "IDR"
+  name: "Rupia indonezyjska"
+  buyAdjustment: null
+  sellAdjustment: 0.15
+  buyEnabled: false
+BRL:
+  code: "BRL"
+  name: "Real brazylijski"
+  buyAdjustment: null
+  sellAdjustment: 0.15
+  buyEnabled: false
