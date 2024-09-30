@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\DTO\CurrencyDTO;
 use App\Model\ReferenceRateProviderInterface;
 use App\Model\CurrencyConfigurationInterface;
+use App\Factory\CurrencyDTOFactory;
 use App\DTO\CurrencyDTOCollection;
 
 class ExchangeRateService
@@ -13,11 +16,13 @@ class ExchangeRateService
 
     private $referenceRateProvider;
     private $currencyConfigurationProvider;
+    private $currencyDTOFactory;
 
-    public function __construct(ReferenceRateProviderInterface $referenceRateProvider, CurrencyConfigurationInterface $currencyConfigurationProvider)
+    public function __construct(ReferenceRateProviderInterface $referenceRateProvider, CurrencyConfigurationInterface $currencyConfigurationProvider, CurrencyDTOFactory $currencyDTOFactory)
     {
         $this->referenceRateProvider = $referenceRateProvider;
         $this->currencyConfigurationProvider = $currencyConfigurationProvider;
+        $this->currencyDTOFactory = $currencyDTOFactory;
     }
 
     public function getCurrencyCollection($date): CurrencyDTOCollection
@@ -26,15 +31,10 @@ class ExchangeRateService
         $currencyCollection = new CurrencyDTOCollection();
 
         $currencyConfigurations = $this->currencyConfigurationProvider->getCurrencyConfiguration();
+
         foreach ($currencyConfigurations as $currencyConfiguration) {
             $referenceRate = $this->referenceRateProvider->getReferenceRate($currencyConfiguration['code'], $date);
-            $sellRate = $referenceRate + $currencyConfiguration['sellAdjustment'];
-            if ($currencyConfiguration['buyEnabled']) {
-                $buyRate = $referenceRate - $currencyConfiguration['buyAdjustment'];
-                $currencyCollection->add(new currencyDTO($currencyConfiguration['code'], $currencyConfiguration['name'], $date, $referenceRate, $buyRate, $sellRate));
-            } else {
-                $currencyCollection->add(new currencyDTO($currencyConfiguration['code'], $currencyConfiguration['name'], $date, $referenceRate, null, $sellRate));
-            }
+            $currencyCollection->add($this->currencyDTOFactory->createCurrencyDTO($currencyConfiguration, $referenceRate, $date));
         }
 
         return $currencyCollection;

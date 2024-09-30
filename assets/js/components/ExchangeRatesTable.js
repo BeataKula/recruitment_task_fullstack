@@ -23,8 +23,8 @@ const ExchangeRatesTable = ({ exchangeRates, todayRates, selectedDate, todayDate
         return (
           <div key={rate.currencyCode} className="grid-row">
             <div className="th-cell">{rate.currencyCode} <span>{rate.currencyName}</span> </div>
-            <div>{formatRate(rate.nbpRate)}</div>
-            <div className="light-cell">{formatRate(todayRate?.nbpRate)}</div>
+            <div>{formatRate(rate.referenceRate)}</div>
+            <div className="light-cell">{formatRate(todayRate?.referenceRate)}</div>
             <div>{formatRate(rate.buyRate)}</div>
             <div className="light-cell">{formatRate(todayRate?.buyRate)}</div>
             <div>{formatRate(rate.sellRate)}</div>
