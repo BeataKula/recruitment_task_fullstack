@@ -27,6 +27,10 @@ class ReferenceRateProviderNBP implements ReferenceRateProviderInterface
         }
 
         $rateData = $response->toArray();
-        return $rateData['rates'][0]['mid'];
+
+        if (!empty($rateData['rates']) && !empty($rateData['rates'][0]) && !empty($rateData['rates'][0]['mid'])) {
+            return $rateData['rates'][0]['mid'];
+        }
+        return null;
     }
 }
